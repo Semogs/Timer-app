@@ -1,6 +1,6 @@
 <div>
   <input type="text" [(ngModel)]="timerName" placeholder="Enter Timer Name" />
-  <button (click)="createTimer()">Add Timer</button>
+  <button class="btn btn-primary" (click)="createTimer()">Add Timer</button>
 </div>
 
 <div *ngFor="let timer of timers; let i = index">
@@ -11,9 +11,25 @@
   <div *ngIf="!timer.isRunning">
     Timer: {{ formatElapsedTime(timer.elapsedTime) }}
   </div>
-  <button (click)="startTimer(i)" [disabled]="timer.endTime || timer.isRunning">
+  <button
+    class="btn btn-primary"
+    (click)="startTimer(i)"
+    [disabled]="timer.endTime || timer.isRunning"
+  >
     Start
   </button>
-  <button (click)="pauseTimer(i)" [disabled]="!timer.isRunning">Pause</button>
-  <button (click)="stopTimer(i)" [disabled]="timer.endTime">Stop</button>
+  <button
+    class="btn btn-primary"
+    (click)="pauseTimer(i)"
+    [disabled]="!timer.isRunning"
+  >
+    Pause
+  </button>
+  <button
+    class="btn btn-primary"
+    (click)="stopTimer(i)"
+    [disabled]="timer.endTime"
+  >
+    Stop
+  </button>
 </div>

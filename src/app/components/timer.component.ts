@@ -39,7 +39,6 @@ export class TimerComponent implements OnInit {
 
   startTimer(index: number) {
     const timer = this.timers[index];
-
     if (!timer.isRunning) {
       this.currentTimerIndex = index;
       timer.isRunning = true;
@@ -71,8 +70,9 @@ export class TimerComponent implements OnInit {
   }
 
   stopTimer(index: number) {
-    clearInterval(this.timers[index].timerInterval);
-    this.timers[index].isRunning = false;
-    this.timers[index].endTime = new Date();
+    const timer = this.timers[index];
+    clearInterval(timer.timerInterval);
+    timer.isRunning = false;
+    timer.endTime = new Date();
   }
 }
