@@ -16,4 +16,15 @@ export class TimerService {
   getTimers(): Timer[] {
     return this.timers;
   }
+
+  startTimer(timer: Timer) {
+    if (!timer.isRunning) {
+      timer.isRunning = true;
+      timer.timerInterval = setInterval(() => {
+        if (timer.isRunning) {
+          timer.elapsedTime++;
+        }
+      }, 1000);
+    }
+  }
 }

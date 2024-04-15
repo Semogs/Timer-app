@@ -14,7 +14,7 @@ import { TimerService } from '../services/timer.service';
 export class TimerListComponent implements OnInit {
   timers: Timer[] = [];
   currentTimerIndex: number = -1;
-  
+
   constructor(private timerService: TimerService) {}
 
   ngOnInit(): void {

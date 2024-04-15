@@ -29,5 +29,6 @@ export class TimerComponent implements OnInit {
     };
     this.timerService.createTimer(newTimer);
     this.timerName = '';
+    this.timerService.startTimer(newTimer);
   }
 }
