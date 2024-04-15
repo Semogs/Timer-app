@@ -1,0 +1,42 @@
+<div>
+  <h2>List of Timers</h2>
+  <button class="btn btn-primary" (click)="('json')">Export JSON</button>
+  <button class="btn btn-primary" (click)="('xlsx')">Export Excel</button>
+  <button class="btn btn-primary" (click)="('txt')">Export Text</button>
+</div>
+
+<div *ngIf="timers.length > 0">
+  <div *ngFor="let timer of timers; let i = index">
+    <h3>{{ timer.name }}</h3>
+    <div *ngIf="timer.isRunning">
+      Timer: {{ formatElapsedTime(timer.elapsedTime) }}
+    </div>
+    <div *ngIf="!timer.isRunning">
+      Timer: {{ formatElapsedTime(timer.elapsedTime) }}
+    </div>
+    <button
+      class="btn btn-primary"
+      (click)="startTimer(i)"
+      [disabled]="timer.endTime || timer.isRunning"
+    >
+      Start
+    </button>
+    <button
+      class="btn btn-primary"
+      (click)="pauseTimer(i)"
+      [disabled]="!timer.isRunning"
+    >
+      Pause
+    </button>
+    <button
+      class="btn btn-primary"
+      (click)="stopTimer(i)"
+      [disabled]="timer.endTime"
+    >
+      Stop
+    </button>
+  </div>
+</div>
+<div *ngIf="timers.length === 0">
+  <p>No timers available.</p>
+</div>
