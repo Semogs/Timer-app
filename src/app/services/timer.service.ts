@@ -25,9 +25,9 @@ export class TimerService {
 
     // Find the index where the timer should be inserted based on its start date
     let insertIndex = this.timers.findIndex((existingTimer) => {
-      const existingStartTime = new Date(existingTimer.startTime);
-      existingStartTime.setHours(0, 0, 0, 0);
-      return existingStartTime <= timerStartTime;
+      const existingTimerStartTime = new Date(existingTimer.startTime);
+      existingTimerStartTime.setHours(0, 0, 0, 0);
+      return existingTimerStartTime < timerStartTime;
     });
 
     if (insertIndex === -1) {
@@ -36,11 +36,11 @@ export class TimerService {
     } else {
       // If existing timers, insert the timer at the correct position
       while (
-        insertIndex < this.timers.length &&
-        new Date(this.timers[insertIndex].startTime).toDateString() ===
+        insertIndex > 0 &&
+        new Date(this.timers[insertIndex - 1].startTime).toDateString() ===
           timerStartTime.toDateString()
       ) {
-        insertIndex++; // Move to the next timer with the same date
+        insertIndex--; // Move to the previous timer with the same date
       }
       this.timers.splice(insertIndex, 0, timer);
     }
