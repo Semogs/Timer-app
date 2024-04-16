@@ -27,7 +27,6 @@ export class TimerService {
   }
 
   startTimer(timer: Timer) {
-    console.log(this.timers);
     if (!timer.isRunning) {
       timer.isRunning = true;
       timer.timerInterval = setInterval(() => {

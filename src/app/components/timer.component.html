@@ -1,12 +1,43 @@
-<div class="d-flex justify-content-center mb-3">
-  <input
-    type="text"
-    class="form-control w-50"
-    placeholder="Enter Timer Name"
-    [(ngModel)]="timerName"
-    (keyup.enter)="createTimer()"
-  />
-  <button class="ml-8" mat-mini-fab (click)="createTimer()" color="primary">
-    <mat-icon>play_arrow</mat-icon>
-  </button>
+<div class="d-flex flex-column">
+  <div class="d-flex justify-content-end mb-5">
+    <button
+      mat-raised-button
+      (click)="exportToXLSX()"
+      color="primary"
+      class="mr-2"
+      [disabled]="!dataLoaded"
+    >
+      Export to XLSX
+    </button>
+    <button
+      class="mr-2"
+      mat-raised-button
+      (click)="exportToJSON()"
+      color="primary"
+      [disabled]="!dataLoaded"
+    >
+      Export to JSON
+    </button>
+    <button
+      class="mr-2"
+      mat-raised-button
+      (click)="exportToTXT()"
+      color="primary"
+      [disabled]="!dataLoaded"
+    >
+      Export to TXT
+    </button>
+  </div>
+  <div class="d-flex justify-content-center mb-3">
+    <input
+      type="text"
+      class="form-control w-50"
+      placeholder="Enter Timer Name"
+      [(ngModel)]="timerName"
+      (keyup.enter)="createTimer()"
+    />
+    <button class="ml-4" mat-mini-fab (click)="createTimer()" color="primary">
+      <mat-icon>play_arrow</mat-icon>
+    </button>
+  </div>
 </div>
