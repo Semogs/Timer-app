@@ -1,9 +1,10 @@
 <div class="d-flex justify-content-center mb-3">
   <input
     type="text"
-    class="form-control w-25"
+    class="form-control w-50"
     placeholder="Enter Timer Name"
     [(ngModel)]="timerName"
+    (keyup.enter)="createTimer()"
   />
   <button class="ml-8" mat-mini-fab (click)="createTimer()" color="primary">
     <mat-icon>play_arrow</mat-icon>

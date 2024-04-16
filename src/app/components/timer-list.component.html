@@ -1,44 +1,51 @@
-<div class="d-flex flex-column justify-content-center p-4">
-  <div class="mt-10" *ngIf="timers.length > 0">
-    <div
-      class="d-flex justify-content-around"
-      *ngFor="let timer of timers; let i = index"
-    >
-      <div class="d-flex">
-        <div class="text-capitalize">{{ timer.name }}</div>
-        <div *ngIf="timer.isRunning">
-          {{ formatElapsedTime(timer.elapsedTime) }}
+<div class="d-flex flex-column justify-content-center p-2">
+  <div *ngFor="let timer of timers; let i = index">
+    <div class="mt-10" *ngIf="timers.length > 0">
+      <div class="mb-4" *ngIf="shouldDisplayDateHeader(i)">
+        <div class="text-center my-3">
+          <div class="text-xl">{{ timer.startTime.toDateString() }}</div>
         </div>
-        <div *ngIf="!timer.isRunning">
-          {{ formatElapsedTime(timer.elapsedTime) }}
-        </div>
+        <mat-divider></mat-divider>
       </div>
-      <div *ngIf="!timer.endTime">
-        <button
-          mat-icon-button
-          (click)="startTimer(timers[i])"
-          [disabled]="timer.endTime || timer.isRunning"
-        >
-          <mat-icon>play_arrow</mat-icon>
-        </button>
-        <button
-          mat-icon-button
-          (click)="pauseTimer(i)"
-          [disabled]="!timer.isRunning"
-        >
-          <mat-icon>pause</mat-icon>
-        </button>
-        <button
-          mat-icon-button
-          (click)="stopTimer(i)"
-          [disabled]="timer.endTime"
-        >
-          <mat-icon>stop</mat-icon>
-        </button>
+      <div class="styled-container">
+        <div class="text-capitalize mr-2 text-right w-20">{{ timer.name }}</div>
+        <div class="w-20 text-center" *ngIf="timer.isRunning">
+          {{ formatElapsedTime(timer.elapsedTime) }}
+        </div>
+        <div class="text-center" *ngIf="timer.endTime">
+          {{ timer.startTime.toLocaleTimeString() }}
+          {{ timer.endTime ? " - " + timer.endTime.toLocaleTimeString() : "" }}
+        </div>
+        <div class="w-20 text-center" *ngIf="!timer.isRunning">
+          {{ formatElapsedTime(timer.elapsedTime) }}
+        </div>
+        <div *ngIf="!timer.endTime" class="w-20 d-flex justify-content-center">
+          <button
+            mat-icon-button
+            (click)="startTimer(timers[i])"
+            [disabled]="timer.endTime || timer.isRunning"
+          >
+            <mat-icon>play_arrow</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            (click)="pauseTimer(i)"
+            [disabled]="!timer.isRunning"
+          >
+            <mat-icon>pause</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            (click)="stopTimer(i)"
+            [disabled]="timer.endTime"
+          >
+            <mat-icon>stop</mat-icon>
+          </button>
+        </div>
       </div>
     </div>
   </div>
-  <div class="text-center mt-5" *ngIf="timers.length === 0">
+  <div class="text-center mt-5 text-xl" *ngIf="timers.length === 0">
     No timers available.
   </div>
 </div>

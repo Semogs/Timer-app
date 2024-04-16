@@ -5,12 +5,19 @@ import { Timer } from '../interface';
 import { TimerService } from '../services/timer.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-timer-list',
   templateUrl: './timer-list.component.html',
   styleUrls: ['./timer-list.component.css'],
-  imports: [CommonModule, FormsModule, MatButtonModule, MatIconModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatButtonModule,
+    MatIconModule,
+    MatDividerModule,
+  ],
   standalone: true,
 })
 export class TimerListComponent implements OnInit {
@@ -24,13 +31,24 @@ export class TimerListComponent implements OnInit {
     this.timers = this.timerService.getTimers();
 
     // Check for previously saved timers in local storage
-    for (let i = 0; localStorage.getItem(`timer-${i}`) !== null; i++) {
-      const savedTimerData = localStorage.getItem(`timer-${i}`);
-      if (savedTimerData) {
-        const savedTimer = JSON.parse(savedTimerData);
-        this.timers.push(savedTimer);
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key) {
+        const savedDateTimers = localStorage.getItem(key);
+        if (savedDateTimers) {
+          const timersForDate: Timer[] = JSON.parse(savedDateTimers);
+          timersForDate.forEach((savedTimer) => {
+            savedTimer.startTime = new Date(savedTimer.startTime);
+            if (savedTimer.endTime) {
+              savedTimer.endTime = new Date(savedTimer.endTime);
+            }
+          });
+          this.timers.push(...timersForDate);
+        }
       }
     }
+
+    this.timers.sort((a, b) => b.startTime.getTime() - a.startTime.getTime());
   }
 
   startTimer(timer: Timer) {
@@ -41,6 +59,22 @@ export class TimerListComponent implements OnInit {
     const timer = this.timers[index];
     clearInterval(timer.timerInterval);
     timer.isRunning = false;
+  }
+
+  stopTimer(index: number) {
+    const timer = this.timers[index];
+    clearInterval(timer.timerInterval);
+    timer.isRunning = false;
+    timer.endTime = new Date();
+
+    const startDateKey = timer.startTime.toDateString();
+    let timersForDate: Timer[] = [];
+    const existingTimers = localStorage.getItem(startDateKey);
+    if (existingTimers) {
+      timersForDate = JSON.parse(existingTimers);
+    }
+    timersForDate.push(timer);
+    localStorage.setItem(startDateKey, JSON.stringify(timersForDate));
   }
 
   formatElapsedTime(seconds: number): string {
@@ -56,11 +90,13 @@ export class TimerListComponent implements OnInit {
     return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
   }
 
-  stopTimer(index: number) {
-    const timer = this.timers[index];
-    clearInterval(timer.timerInterval);
-    timer.isRunning = false;
-    timer.endTime = new Date();
-    localStorage.setItem(`timer-${index}`, JSON.stringify(timer));
+  shouldDisplayDateHeader(index: number): boolean {
+    if (index === 0) {
+      return true;
+    } else {
+      const currentDate = this.timers[index].startTime.toDateString();
+      const previousDate = this.timers[index - 1].startTime.toDateString();
+      return currentDate !== previousDate;
+    }
   }
 }

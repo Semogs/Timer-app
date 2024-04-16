@@ -5,7 +5,6 @@ import { Timer } from '../interface';
 import { TimerListComponent } from './timer-list.component';
 import { TimerService } from '../services/timer.service';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 
@@ -18,7 +17,6 @@ import { MatInputModule } from '@angular/material/input';
     FormsModule,
     TimerListComponent,
     MatButtonModule,
-    MatDividerModule,
     MatIconModule,
     MatInputModule,
   ],

@@ -7,10 +7,19 @@ import { Timer } from '../interface';
 export class TimerService {
   timers: Timer[] = [];
 
-  constructor() {}
+  constructor() {
+    this.loadTimersFromLocalStorage();
+  }
+
+  private loadTimersFromLocalStorage() {
+    const savedTimers = localStorage.getItem('timers');
+    if (savedTimers) {
+      this.timers = JSON.parse(savedTimers);
+    }
+  }
 
   createTimer(timer: Timer) {
-    this.timers.push(timer);
+    this.timers.unshift(timer);
   }
 
   getTimers(): Timer[] {
@@ -18,6 +27,7 @@ export class TimerService {
   }
 
   startTimer(timer: Timer) {
+    console.log(this.timers);
     if (!timer.isRunning) {
       timer.isRunning = true;
       timer.timerInterval = setInterval(() => {
