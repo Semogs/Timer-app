@@ -1,7 +1,7 @@
 <div class="d-flex flex-column justify-content-center p-2">
   <div *ngFor="let timer of timers; let i = index">
     <div class="mt-10" *ngIf="timers.length > 0">
-      <div class="mb-4" *ngIf="shouldDisplayDateHeader(i)">
+      <div class="my-5" *ngIf="shouldDisplayDateHeader(i)">
         <div class="text-center my-3">
           <div class="text-xl">{{ timer.startTime.toDateString() }}</div>
         </div>
