@@ -19,7 +19,31 @@ export class TimerService {
   }
 
   createTimer(timer: Timer) {
-    this.timers.unshift(timer);
+    const timerStartTime = new Date(timer.startTime);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to 0 for accurate comparison
+
+    // Find the index where the timer should be inserted based on its start date
+    let insertIndex = this.timers.findIndex((existingTimer) => {
+      const existingStartTime = new Date(existingTimer.startTime);
+      existingStartTime.setHours(0, 0, 0, 0);
+      return existingStartTime <= timerStartTime;
+    });
+
+    if (insertIndex === -1) {
+      // If no existing timers, just push the timer
+      this.timers.push(timer);
+    } else {
+      // If existing timers, insert the timer at the correct position
+      while (
+        insertIndex < this.timers.length &&
+        new Date(this.timers[insertIndex].startTime).toDateString() ===
+          timerStartTime.toDateString()
+      ) {
+        insertIndex++; // Move to the next timer with the same date
+      }
+      this.timers.splice(insertIndex, 0, timer);
+    }
   }
 
   getTimers(): Timer[] {
