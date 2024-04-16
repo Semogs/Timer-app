@@ -1,42 +1,44 @@
-<div>
-  <h2>List of Timers</h2>
-  <button class="btn btn-primary" (click)="('json')">Export JSON</button>
-  <button class="btn btn-primary" (click)="('xlsx')">Export Excel</button>
-  <button class="btn btn-primary" (click)="('txt')">Export Text</button>
-</div>
-
-<div *ngIf="timers.length > 0">
-  <div *ngFor="let timer of timers; let i = index">
-    <h3>{{ timer.name }}</h3>
-    <div *ngIf="timer.isRunning">
-      Timer: {{ formatElapsedTime(timer.elapsedTime) }}
+<div class="d-flex flex-column justify-content-center p-4">
+  <div class="mt-10" *ngIf="timers.length > 0">
+    <div
+      class="d-flex justify-content-around"
+      *ngFor="let timer of timers; let i = index"
+    >
+      <div class="d-flex">
+        <div class="text-capitalize">{{ timer.name }}</div>
+        <div *ngIf="timer.isRunning">
+          {{ formatElapsedTime(timer.elapsedTime) }}
+        </div>
+        <div *ngIf="!timer.isRunning">
+          {{ formatElapsedTime(timer.elapsedTime) }}
+        </div>
+      </div>
+      <div *ngIf="!timer.endTime">
+        <button
+          mat-icon-button
+          (click)="startTimer(timers[i])"
+          [disabled]="timer.endTime || timer.isRunning"
+        >
+          <mat-icon>play_arrow</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          (click)="pauseTimer(i)"
+          [disabled]="!timer.isRunning"
+        >
+          <mat-icon>pause</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          (click)="stopTimer(i)"
+          [disabled]="timer.endTime"
+        >
+          <mat-icon>stop</mat-icon>
+        </button>
+      </div>
     </div>
-    <div *ngIf="!timer.isRunning">
-      Timer: {{ formatElapsedTime(timer.elapsedTime) }}
-    </div>
-    <button
-      class="btn btn-primary"
-      (click)="startTimer(i)"
-      [disabled]="timer.endTime || timer.isRunning"
-    >
-      Start
-    </button>
-    <button
-      class="btn btn-primary"
-      (click)="pauseTimer(i)"
-      [disabled]="!timer.isRunning"
-    >
-      Pause
-    </button>
-    <button
-      class="btn btn-primary"
-      (click)="stopTimer(i)"
-      [disabled]="timer.endTime"
-    >
-      Stop
-    </button>
   </div>
-</div>
-<div *ngIf="timers.length === 0">
-  <p>No timers available.</p>
+  <div class="text-center mt-5" *ngIf="timers.length === 0">
+    No timers available.
+  </div>
 </div>

@@ -3,12 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Timer } from '../interface';
 import { TimerService } from '../services/timer.service';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-timer-list',
   templateUrl: './timer-list.component.html',
   styleUrls: ['./timer-list.component.css'],
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatButtonModule, MatIconModule],
   standalone: true,
 })
 export class TimerListComponent implements OnInit {
@@ -20,19 +22,19 @@ export class TimerListComponent implements OnInit {
   ngOnInit(): void {
     // Retrieve timers from the timer service
     this.timers = this.timerService.getTimers();
+
+    // Check for previously saved timers in local storage
+    for (let i = 0; localStorage.getItem(`timer-${i}`) !== null; i++) {
+      const savedTimerData = localStorage.getItem(`timer-${i}`);
+      if (savedTimerData) {
+        const savedTimer = JSON.parse(savedTimerData);
+        this.timers.push(savedTimer);
+      }
+    }
   }
 
-  startTimer(index: number) {
-    const timer = this.timers[index];
-    if (!timer.isRunning) {
-      this.currentTimerIndex = index;
-      timer.isRunning = true;
-      timer.timerInterval = setInterval(() => {
-        if (timer.isRunning) {
-          timer.elapsedTime++;
-        }
-      }, 1000);
-    }
+  startTimer(timer: Timer) {
+    this.timerService.startTimer(timer);
   }
 
   pauseTimer(index: number) {
@@ -59,5 +61,6 @@ export class TimerListComponent implements OnInit {
     clearInterval(timer.timerInterval);
     timer.isRunning = false;
     timer.endTime = new Date();
+    localStorage.setItem(`timer-${index}`, JSON.stringify(timer));
   }
 }
